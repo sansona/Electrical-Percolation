@@ -38,13 +38,13 @@ class WeightedQuickUnion(QuickUnion):
         if root1 == root2:
             return
 
-        if weight[root1] < weight[root2]:
-            array[root1] = root2
-            weight[root2] = weight[root2] + weight[root1]
+        if self.weight[root1] < self.weight[root2]:
+            self.array[root1] = root2
+            self.weight[root2] = self.weight[root2] + self.weight[root1]
 
         else:
-            array[root2] = root1
-            weight[root1] = weight[root1] + weight[root2]
+            self.array[root2] = root1
+            self.weight[root1] = self.weight[root1] + self.weight[root2]
 
 
 
