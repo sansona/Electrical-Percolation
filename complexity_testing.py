@@ -1,4 +1,4 @@
-from union_algorithms import QuickUnion, WeightedQuickUnion
+from union_algorithms import QuickUnion, WeightedQuickUnion, WQU_PathCompression
 import timeit
 
 def time_test(algorithm):
@@ -12,8 +12,9 @@ def time_test(algorithm):
     t.union(0,3)
     t.connected(0,4)
 
-num_tests = 6
+num_tests = 5
 iterations = 100
+'''
 print('Quick union implementation:')
 for i in range(num_tests):
     t = timeit.timeit(stmt="time_test(QuickUnion)",
@@ -32,4 +33,19 @@ for i in range(num_tests):
             number=iterations)
     print('For %s iterations, it takes %.2f seconds' %(iterations, t))
     iterations = iterations*10
+
+    if i == num_tests - 1:
+        iterations = 100
+'''
+
+print('\nWeighted quick union with path compression implementation:')
+for i in range(num_tests):
+    t = timeit.timeit(stmt="time_test(WQU_PathCompression)",
+            setup="from union_algorithms import WQU_PathCompression; from __main__ import time_test",
+            number=iterations)
+    print('For %s iterations, it takes %.2f seconds' %(iterations, t))
+    iterations = iterations*10
+
+    if i == num_tests - 1:
+        iterations = 100
 
