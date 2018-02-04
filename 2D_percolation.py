@@ -16,20 +16,20 @@ else:
         p = p/100
     
 
-lattice = WQU_PathCompression(n**2)
+lattice = WQU_PathCompression(n**2 + 2) #+2 for top & bottom nodes (used later)
 
 #print ('Original lattice array: ' + str(lattice.array))
-closed_index = random.sample(range(0, max(lattice.array)), round((n**2)*p)) #randomly choose index of closed sites
+closed_index = random.sample(range(1, max(lattice.array)), round((n**2)*p)) #randomly choose index of closed sites
 
 for index in closed_index:
-    lattice.array[index] = 0
+    lattice.array[index] = 'X' #used a char to prevent any index clashing, though results in having to include try-excepts for IndexErrors
 
 #print('Modified lattice array: ' + str(lattice.array))
 
 #cut up lattice.array to n sized lists to better determine connectivity between sites
-organized_lattice = [lattice.array[i:i+n] for i in range(0, len(lattice.array), n)] 
+organized_lattice = [lattice.array[i:i+n] for i in range(1, len(lattice.array) - 1, n)] 
 
-#print(organized_lattice)
+#print('Organized lattice: ' + str(organized_lattice))
 
 #connects open/conducting atoms on same horizontal plane
 for plane in organized_lattice:
@@ -38,13 +38,15 @@ for plane in organized_lattice:
             current_atom = plane[atom]
             next_atom = plane[atom+1]
 
-            if current_atom == 0 or next_atom == 0:
+            if current_atom == 'X' or next_atom == 'X':
                 #save computation time by not connecting closed sites
                 continue
             else:
                 #note: union applies to the original lattice.array, not the organized_lattice
                 lattice.union(current_atom, next_atom)
 
+        except TypeError:
+            continue
         except IndexError:
             continue
 
@@ -55,7 +57,7 @@ for plane in range(len(organized_lattice)):
             top_atom = organized_lattice[plane][atom]
             bottom_atom = organized_lattice[plane+1][atom]
 
-            if top_atom == 0 or bottom_atom == 0:
+            if top_atom == 'X' or bottom_atom == 'X':
                 continue
             else:
                 lattice.union(top_atom, bottom_atom)
@@ -64,24 +66,24 @@ for plane in range(len(organized_lattice)):
             continue
 
 #connect top plane and bottom plane to respective imaginary atoms
-top_atom = 100000 #large number to prevent collision
-bottom_atom = 999999
-
-lattice.array.insert(0, top_atom)
-lattice.array.append(bottom_atom)
+top_atom = lattice.array[0]
+bottom_atom = lattice.array[-1]
 
 for atom in organized_lattice[0]:
     try:
         lattice.union(top_atom, atom)
-    except IndexError:
+    except TypeError:
+        #to catch organized_lattice['X']
         continue
+
 for atom in organized_lattice[-1]:
     try:
         lattice.union(bottom_atom, atom)
-    except IndexError:
+    except TypeError:
         continue
 
-lattice.connected(top_atom, bottom_atom)
+#reduces complexity of testing connectivity of each top plane atom with each bottom plane atom
+print(lattice.connected(top_atom, bottom_atom))
 
 
 

@@ -1,7 +1,7 @@
 class QuickUnion(object):
     #simple quickunion implementation - O(n^2)
     def __init__(self, size):
-        self.array = [node for node in range(size)]
+        self.array = [node for node in range(size)] 
         self.size = size
 
     def union(self, node1, node2):
