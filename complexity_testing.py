@@ -12,9 +12,8 @@ def time_test(algorithm):
     t.union(0,3)
     t.connected(0,4)
 
-num_tests = 5
+num_tests = 6
 iterations = 100
-'''
 print('Quick union implementation:')
 for i in range(num_tests):
     t = timeit.timeit(stmt="time_test(QuickUnion)",
@@ -36,7 +35,6 @@ for i in range(num_tests):
 
     if i == num_tests - 1:
         iterations = 100
-'''
 
 print('\nWeighted quick union with path compression implementation:')
 for i in range(num_tests):
