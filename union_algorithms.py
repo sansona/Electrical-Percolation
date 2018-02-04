@@ -20,6 +20,7 @@ class QuickUnion(object):
         while node2 != self.array[node2]:
             node2 = self.array[node2]
         root2 = node2
+
         return root1 == root2
 
 
@@ -54,7 +55,7 @@ class WQU_PathCompression(WeightedQuickUnion):
     #attaches root branch to grandparent upon traversing - O(1) in practice
     def root(self, node):
         while node != self.array[node]:
-            self.array[node] = self.array[self.array[node]] #attaches root branch to grandparent
+            self.array[node] = self.array[self.array[node]] #attaches branch to grandparent
             node = self.array[node]
         root = node
         return root
