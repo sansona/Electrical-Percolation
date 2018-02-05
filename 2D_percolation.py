@@ -2,7 +2,8 @@ from union_algorithms import WQU_PathCompression
 import sys
 import random
 
-#argv[1] = #lattice edge length, argv[2] = proprtion of sites closed/insulating
+#Runs one-time WQU w/ path compression to determine if material with argv[1] atoms in 1D and %argv[2] insulating sites will be conductive
+#argv[1] = #lattice edge length, argv[2] = proportion of sites closed/insulating
 if len(sys.argv) == 3:
     n = int(sys.argv[1])
     if int(sys.argv[2]) > 1:
@@ -18,18 +19,14 @@ else:
 
 lattice = WQU_PathCompression(n**2 + 2) #+2 for top & bottom nodes (used later)
 
-#print ('Original lattice array: ' + str(lattice.array))
 closed_index = random.sample(range(1, max(lattice.array)), round((n**2)*p)) #randomly choose index of closed sites
 
 for index in closed_index:
     lattice.array[index] = 'X' #used a char to prevent any index clashing, though results in having to include try-excepts for IndexErrors
 
-#print('Modified lattice array: ' + str(lattice.array))
 
 #cut up lattice.array to n sized lists to better determine connectivity between sites
 organized_lattice = [lattice.array[i:i+n] for i in range(1, len(lattice.array) - 1, n)] 
-
-#print('Organized lattice: ' + str(organized_lattice))
 
 #connects open/conducting atoms on same horizontal plane
 for plane in organized_lattice:
@@ -84,12 +81,3 @@ for atom in organized_lattice[-1]:
 
 #reduces complexity of testing connectivity of each top plane atom with each bottom plane atom
 print(lattice.connected(top_atom, bottom_atom))
-
-
-
-
-
-
-
-
-
