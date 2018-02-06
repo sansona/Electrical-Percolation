@@ -26,7 +26,7 @@ The goal of union-find algorithms is to efficiently perform these two actions - 
 
 Electric percolation is modelled by starting off with a lattice of m insulating atoms and randomly choosing atoms to become conductive. After each switch, the conductivity of the lattice is tested and the process is repeated until the lattice is conductive. The condition for conductivity requires that there be a conductive pathway between a fictitious top and bottom atom that are connected to the top and bottom planes of the lattice respectively. Thus, by applying a quick union algorithm to determine the connectivity of the two fictitious atoms, one can algorithmically and efficiently determine the conductivity of the lattice as a whole.
 
-In this project, a 2D lattice of 10,000 atoms was utilized to determine the percolation threshhold - the percentage of atoms that have to be conductive, on average, to lead to a conductive lattice. A simple monte carlo simulation is implemented to probe the simulation n times in order to calculate the average expected threshhold value and create a distribution of values, which can be seen below for n = 10, 100, 1000, and 10000 atoms:
+In this project, a 2D lattice of 10,000 atoms was utilized to determine the percolation threshhold - the percentage of atoms that have to be conductive, on average, to lead to a conductive lattice. A simple monte carlo simulation is implemented to probe the simulation n times in order to calculate the average expected threshhold value and create a distribution of values, which can be seen below for n = 10, 100, 1000, and 10000 samples:
 
 ![montecarlo10](https://user-images.githubusercontent.com/17757035/35840102-efede612-0aa8-11e8-9d48-ace0a75a36c6.png)
 ```
