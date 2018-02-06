@@ -1,11 +1,13 @@
 from union_algorithms import WQU_PathCompression
+import matplotlib.pyplot as plt
+import statistics
 import math
 import random
 
-#Runs simple Monte Carlo simulation to determine percolation thresshold of 1000 atom 2D lattice
+#Runs simple Monte Carlo simulation to determine percolation thresshold of 10000 atom 2D lattice
 
 def percolation_threshhold():
-    number_atoms = 100 #temporarily 100 for ease of computation
+    number_atoms = 10000 
     lattice = WQU_PathCompression(number_atoms + 2) #+2 for placeholder atoms used later to determine connectivity
 
     lattice.array[1:-1] = ['X' for atom in lattice.array[1:-1]] #all atoms except for placeholders start off insulating
@@ -15,7 +17,7 @@ def percolation_threshhold():
 
     number_open_sites = -1 #-1 to account for continues in while loop
     conductive = False
-    open_index = random.sample(range(1, number_atoms), 98)
+    open_index = random.sample(range(1, number_atoms), 10000 - 2)
 
     while conductive == False:
         number_open_sites = number_open_sites + 1
@@ -53,14 +55,72 @@ def percolation_threshhold():
             pass
 
         conductive = lattice.connected(top_atom, bottom_atom)
-
-    print('Percent sites conductive for lattice to be conductive: %s' %(number_open_sites/100))
     
-    return number_open_sites/100
+    threshhold = number_open_sites/100
+    
+    return threshhold
 
-percolation_threshhold()
 
-#Next: 1. Implement Monte Carlo simulation, 2. Implement graphing to determine threshhold, 3. Include confidence intervals
+def monte_carlo(num_samples):
+    threshhold_list = [] #list of percolation_threshholds from each sample
+    for sample in range(num_samples):
+        percolation_threshhold()
+        threshhold_list.append(percolation_threshhold())
+    
+    stdev = statistics.stdev(threshhold_list)
+    mean = statistics.mean(threshhold_list) #can just do sum(threshhold_list)/len(threshhold_list), but this is more efficient
+    
+    #95% confidence
+    lower_interval = mean - (1.96*stdev)/math.sqrt(num_samples)
+    upper_interval = mean + (1.96*stdev)/math.sqrt(num_samples)
+   
+
+    #begins plotting section
+    histogram = plt.hist(
+            threshhold_list, 
+            bins=20, 
+            color='c',
+            edgecolor='k', 
+            linewidth=2
+            )
+
+    #Plots mean line and confidence interval
+    plt.axvline(
+            mean,
+            color='r',
+            linestyle='dashed',
+            linewidth=3
+            )
+
+    plt.axvline(
+            lower_interval,
+            color='black',
+            linestyle='dashed',
+            linewidth=1.5
+            )
+
+    plt.axvline(
+            upper_interval,
+            color='black',
+            linestyle='dashed',
+            linewidth=1.5
+            )
+
+
+    plt.title("Percolation Threshholds from Monte-Carlo Simulation (n = %s)" %num_samples)
+    plt.xlabel("Threshhold (%conductive)")
+    plt.ylabel("Probability")
+
+    #plt.show()
+    plt.savefig('MonteCarlo%s' %num_samples, bbox_inches='tight')
+
+    print('The average threshhold value for 10000 atoms over %s samples is %.2f, with a confidence interval of [%.2f, %.2f]' 
+        %(num_samples, mean, lower_interval, upper_interval))
+    
+
+monte_carlo(1000) #adjust for number of sample runs
+
+
 
 
 
