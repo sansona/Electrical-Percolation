@@ -114,14 +114,9 @@ def monte_carlo(num_samples):
     #plt.show()
     plt.savefig('MonteCarlo%s' %num_samples, bbox_inches='tight')
 
-    print('The average threshhold value for 10000 atoms over %s samples is %.2f, with a confidence interval of [%.2f, %.2f]' 
+    print('The average threshhold value for 10000 atoms over %s samples is %.1f, with a confidence interval of [%.1f, %.1f]' 
         %(num_samples, mean, lower_interval, upper_interval))
     
 
 monte_carlo(1000) #adjust for number of sample runs
-
-
-
-
-
 
